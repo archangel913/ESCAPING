@@ -460,6 +460,7 @@ MonoBehaviour:
   m_FloorSize: 31
   m_FloorParent: {fileID: 1201254716}
   m_WallParent: {fileID: 171200540}
+  m_LoopNum: 31
 --- !u!4 &1720537882
 Transform:
   m_ObjectHideFlags: 0

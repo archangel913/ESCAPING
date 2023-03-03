@@ -15,6 +15,9 @@ namespace Escaping.GameScene
         [SerializeField]
         private Transform m_WallParent;
 
+        [SerializeField]
+        private int m_LoopNum = 3;
+
         public enum Map
         {
             Wall = 0,
@@ -23,13 +26,13 @@ namespace Escaping.GameScene
 
         private async void Start()
         {
-            GameObject floor = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Floor");
-            GameObject wall  = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Wall");
+            var floor = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Floor");
+            var wall = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Wall");
 
             floor.transform.localScale = new Vector3(m_FloorSize, 1, m_FloorSize);
-            Instantiate(floor, new Vector3(m_FloorSize/2, 0, m_FloorSize/2), Quaternion.identity, m_FloorParent);
+            Instantiate(floor, new Vector3(m_FloorSize / 2, 0, m_FloorSize / 2), Quaternion.identity, m_FloorParent);
 
-            Map[,] map = GenerateMaze();
+            var map = GenerateMaze();
 
             for (int x = 0; x < m_FloorSize; ++x)
             {
@@ -45,7 +48,7 @@ namespace Escaping.GameScene
 
         private Map[,] GenerateMaze()
         {
-            Map[,] map = new Map[m_FloorSize, m_FloorSize];
+            var map = new Map[m_FloorSize, m_FloorSize];
 
             for (int x = 0; x < m_FloorSize; ++x)
             {
@@ -109,13 +112,24 @@ namespace Escaping.GameScene
                 }
             }
 
+            if (Random.Range(0, 2) % 2 == 0)
+            {
+                map[m_FloorSize - 2, m_FloorSize - 3] = Map.Path;
+            }
+            else
+            {
+                map[m_FloorSize - 3, m_FloorSize - 2] = Map.Path;
+            }
+
+            GenerateLoop(map);
+
             return map;
         }
 
         private Vector2Int? GenerateOnePath(Map[,] map, Vector2Int pos)
         {
             var next = new List<Vector2Int>();
-            List<Vector2Int> vectors = new() {
+            var vectors = new List<Vector2Int>() {
                 new Vector2Int(1,0),
                 new Vector2Int(0,1),
                 new Vector2Int(-1,0),
@@ -138,6 +152,26 @@ namespace Escaping.GameScene
             }
 
             return null;
+        }
+
+        private void GenerateLoop(Map[,] map)
+        {
+            for (int i = 0; i < m_LoopNum; ++i)
+            {
+                int x = Random.Range(3, m_FloorSize - 3);
+                int y;
+
+                while (true)
+                {
+                    y = Random.Range(3, m_FloorSize - 3);
+
+                    if (((x % 2 == 0 && y % 2 == 1) || (x % 2 == 1 && y % 2 == 0)) && map[x, y] == Map.Wall)
+                    {
+                        break;
+                    }
+                }
+                map[x, y] = Map.Path;
+            }
         }
     }
 }

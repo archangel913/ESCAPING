@@ -392,9 +392,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75efa7ebbbd54d44848624d18211e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Floorsize: 31
+  m_FloorSize: 31
   m_FloorParent: {fileID: 1201254716}
   m_WallParent: {fileID: 171200540}
+  m_LoopNum: 31
 --- !u!4 &1720537882
 Transform:
   m_ObjectHideFlags: 0

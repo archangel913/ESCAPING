@@ -10,6 +10,7 @@ namespace Escaping.Core
     public class SceneBase : MonoBehaviour
     {
         private bool m_IsActive;
+        private bool m_IsLoaded;
 
         /// <summary>
         /// Unity のアップデート処理
@@ -46,7 +47,8 @@ namespace Escaping.Core
         {
             m_IsActive = false;
             Fade.Instance.FadeOut();
-            Fade.Instance.AddOnFadeFinished((isFadeIn) => {
+            Fade.Instance.AddOnFadeFinished((isFadeIn) =>
+            {
                 if (!isFadeIn)
                 {
                     SceneLoad(sceneName);
@@ -58,11 +60,9 @@ namespace Escaping.Core
             });
         }
 
-        private async void SceneLoad(string sceneName)
+        private void SceneLoad(string sceneName)
         {
-            await Loading.Create("Prefabs/Core/LoadingImage", Game.Instance.transform);
             Loading.Instance.Show();
-
             SceneManager.LoadScene(sceneName);
         }
 
@@ -72,26 +72,28 @@ namespace Escaping.Core
             {
                 await Game.Create("Prefabs/Core/Game");
                 CurrentScene = SceneManager.GetActiveScene();
-                SceneLoad(CurrentScene.name);
+                await Loading.Create("Prefabs/Core/LoadingImage", Game.Instance.transform);
+                Loading.Instance.Show();
+                m_IsActive = true;
             }
-            else
+
+            ISceneLoader load;
+            if ((load = this as ISceneLoader) != null)
             {
-                ISceneLoader load;
-                if ((load = this as ISceneLoader) != null)
-                {
-                    await load.OnLoading();
-                }
-
-                Loading.Instance.Hide();
-                Fade.Instance.FadeIn();
-
-                CurrentScene = SceneManager.GetActiveScene();
+                await load.OnLoading();
             }
+
+            m_IsLoaded = true;
+
+            Loading.Instance.Hide();
+            Fade.Instance.FadeIn();
+
+            CurrentScene = SceneManager.GetActiveScene();
         }
 
         private void Update()
         {
-            if (!m_IsActive)
+            if (!m_IsActive || !m_IsLoaded)
             {
                 return;
             }

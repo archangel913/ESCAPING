@@ -4,6 +4,9 @@ namespace Escaping.GameScene
     using Escaping.Core.FileSystems;
     using UnityEngine;
 
+    /// <summary>
+    /// マップ生成クラス
+    /// </summary>
     public class GenerateMap : MonoBehaviour
     {
         [SerializeField]
@@ -18,13 +21,16 @@ namespace Escaping.GameScene
         [SerializeField]
         private int m_LoopNum = 3;
 
-        public enum Map
+        private enum Map
         {
             Wall = 0,
             Path = 1
         }
 
-        private async void Start()
+        /// <summary>
+        /// マップ生成
+        /// </summary>
+        public async void Init()
         {
             var floor = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Floor");
             var wall = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Wall");

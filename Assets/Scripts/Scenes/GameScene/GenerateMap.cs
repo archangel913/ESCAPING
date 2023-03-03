@@ -7,7 +7,7 @@ namespace Escaping.GameScene
     public class GenerateMap : MonoBehaviour
     {
         [SerializeField]
-        private int m_Floorsize = 31;
+        private int m_FloorSize = 31;
 
         [SerializeField]
         private Transform m_FloorParent;
@@ -23,22 +23,17 @@ namespace Escaping.GameScene
 
         private async void Start()
         {
-            GameObject floor = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/Floor");
-            GameObject wall  = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/Wall");
+            GameObject floor = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Floor");
+            GameObject wall  = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Wall");
 
-            for (int x = 0; x < m_Floorsize; ++x)
-            {
-                for (int z = 0; z < m_Floorsize; ++z)
-                {
-                    Instantiate(floor, new Vector3(x, 0, z), Quaternion.identity, m_FloorParent);
-                }
-            }
+            floor.transform.localScale = new Vector3(m_FloorSize, 1, m_FloorSize);
+            Instantiate(floor, new Vector3(m_FloorSize/2, 0, m_FloorSize/2), Quaternion.identity, m_FloorParent);
 
             Map[,] map = GenerateMaze();
 
-            for (int x = 0; x < m_Floorsize; ++x)
+            for (int x = 0; x < m_FloorSize; ++x)
             {
-                for (int z = 0; z < m_Floorsize; ++z)
+                for (int z = 0; z < m_FloorSize; ++z)
                 {
                     if (map[x, z] == Map.Wall)
                     {
@@ -50,13 +45,13 @@ namespace Escaping.GameScene
 
         private Map[,] GenerateMaze()
         {
-            Map[,] map = new Map[m_Floorsize, m_Floorsize];
+            Map[,] map = new Map[m_FloorSize, m_FloorSize];
 
-            for (int x = 0; x < m_Floorsize; ++x)
+            for (int x = 0; x < m_FloorSize; ++x)
             {
-                for (int z = 0; z < m_Floorsize; ++z)
+                for (int z = 0; z < m_FloorSize; ++z)
                 {
-                    if (x == 0 || z == 0 || x == m_Floorsize - 1 || z == m_Floorsize - 1)
+                    if (x == 0 || z == 0 || x == m_FloorSize - 1 || z == m_FloorSize - 1)
                     {
                         map[x, z] = Map.Path;
                     }
@@ -72,12 +67,12 @@ namespace Escaping.GameScene
 
             while (start.x % 2 != 0)
             {
-                start.x = Random.Range(2, m_Floorsize - 2);
+                start.x = Random.Range(2, m_FloorSize - 2);
             }
 
             while (start.y % 2 != 0)
             {
-                start.y = Random.Range(2, m_Floorsize - 2);
+                start.y = Random.Range(2, m_FloorSize - 2);
             }
 
             map[start.x, start.y] = Map.Path;

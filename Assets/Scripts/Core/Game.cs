@@ -18,7 +18,6 @@
 
         private void Update()
         {
-            Fade.Instance?.Run();
             Loading.Instance?.Run();
         }
     }

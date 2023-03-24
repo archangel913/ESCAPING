@@ -7,14 +7,14 @@ namespace Escaping.GameScene
     /// </summary>
     public class Player : MonoBehaviour
     {
-        [SerializeField]
-        private float m_Speed = 1;
-
         private readonly float m_Gravity = 9.80665f;
 
         private readonly float m_RotationLimit = 80;
 
         private readonly float m_360 = 360;
+
+        [SerializeField]
+        private float m_Speed = 1;
 
         private CharacterController m_CharacterController;
 

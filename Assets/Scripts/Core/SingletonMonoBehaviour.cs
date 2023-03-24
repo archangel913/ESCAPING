@@ -8,7 +8,8 @@
     /// MonoBehaviour を継承したシングルトンクラス
     /// </summary>
     /// <typeparam name="T">継承するクラス</typeparam>
-    public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
+    public abstract class SingletonMonoBehaviour<T> : MonoBehaviour
+        where T : SingletonMonoBehaviour<T>
     {
         /// <summary>
         /// インスタンス
@@ -23,7 +24,9 @@
         /// <summary>
         /// インスタンスをプレハブから生成
         /// </summary>
-        /// <param name="prefab">生成するプレハブ</param>
+        /// <param name="prefabPath">生成するプレハブのパス</param>
+        /// <param name="parent">生成時の親にする Taransform</param>
+        /// <returns>void</returns>
         public static async UniTask Create(string prefabPath, Transform parent = null)
         {
             if (Instance != null)
@@ -57,6 +60,8 @@
         /// <summary>
         /// インスタンス生成時に実行
         /// </summary>
-        protected virtual void OnCreatedInstance() { }
+        protected virtual void OnCreatedInstance()
+        {
+        }
     }
 }

@@ -4,7 +4,8 @@
     /// シングルトンクラス
     /// </summary>
     /// <typeparam name="T">継承するクラス</typeparam>
-    public abstract class Singleton<T> where T : Singleton<T>, new()
+    public abstract class Singleton<T>
+        where T : Singleton<T>, new()
     {
         private static T m_Instance = null;
 

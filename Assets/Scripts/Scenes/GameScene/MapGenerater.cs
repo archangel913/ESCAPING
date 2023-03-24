@@ -1,13 +1,14 @@
 namespace Escaping.GameScene
 {
     using System.Collections.Generic;
+    using Cysharp.Threading.Tasks;
     using Escaping.Core.FileSystems;
     using UnityEngine;
 
     /// <summary>
     /// マップ生成クラス
     /// </summary>
-    public class GenerateMap : MonoBehaviour
+    public class MapGenerater : MonoBehaviour
     {
         [SerializeField]
         private int m_FloorSize = 31;
@@ -21,16 +22,11 @@ namespace Escaping.GameScene
         [SerializeField]
         private int m_LoopNum = 3;
 
-        private enum Map
-        {
-            Wall = 0,
-            Path = 1
-        }
-
         /// <summary>
-        /// マップ生成
+        /// マップ初期化
         /// </summary>
-        public async void Init()
+        /// <returns>Mapクラス</returns>
+        public async UniTask<Map> Init()
         {
             var floor = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Floor");
             var wall = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Wall");
@@ -39,22 +35,25 @@ namespace Escaping.GameScene
             Instantiate(floor, new Vector3(m_FloorSize / 2, 0, m_FloorSize / 2), Quaternion.identity, m_FloorParent);
 
             var map = GenerateMaze();
+            var map2d = map.GetMap();
 
             for (int x = 0; x < m_FloorSize; ++x)
             {
                 for (int z = 0; z < m_FloorSize; ++z)
                 {
-                    if (map[x, z] == Map.Wall)
+                    if (map2d[x, z] == MapStructure.Wall)
                     {
                         Instantiate(wall, new Vector3(x, 1, z), Quaternion.identity, m_WallParent);
                     }
                 }
             }
+
+            return map;
         }
 
-        private Map[,] GenerateMaze()
+        private Map GenerateMaze()
         {
-            var map = new Map[m_FloorSize, m_FloorSize];
+            var map = new MapStructure[m_FloorSize, m_FloorSize];
 
             for (int x = 0; x < m_FloorSize; ++x)
             {
@@ -62,11 +61,11 @@ namespace Escaping.GameScene
                 {
                     if (x == 0 || z == 0 || x == m_FloorSize - 1 || z == m_FloorSize - 1)
                     {
-                        map[x, z] = Map.Path;
+                        map[x, z] = MapStructure.Path;
                     }
                     else
                     {
-                        map[x, z] = Map.Wall;
+                        map[x, z] = MapStructure.Wall;
                     }
                 }
             }
@@ -84,7 +83,7 @@ namespace Escaping.GameScene
                 start.y = Random.Range(2, m_FloorSize - 2);
             }
 
-            map[start.x, start.y] = Map.Path;
+            map[start.x, start.y] = MapStructure.Path;
 
             candidate.Add(start);
             Vector2Int? canNullDir;
@@ -106,8 +105,8 @@ namespace Escaping.GameScene
                     }
 
                     dir = (Vector2Int)canNullDir;
-                    map[pos.x + dir.x, pos.y + dir.y] = Map.Path;
-                    map[pos.x + dir.x * 2, pos.y + dir.y * 2] = Map.Path;
+                    map[pos.x + dir.x, pos.y + dir.y] = MapStructure.Path;
+                    map[pos.x + dir.x * 2, pos.y + dir.y * 2] = MapStructure.Path;
 
                     if (pos.x % 2 == 0 && pos.y % 2 == 0)
                     {
@@ -120,19 +119,19 @@ namespace Escaping.GameScene
 
             if (Random.Range(0, 2) % 2 == 0)
             {
-                map[m_FloorSize - 2, m_FloorSize - 3] = Map.Path;
+                map[m_FloorSize - 2, m_FloorSize - 3] = MapStructure.Path;
             }
             else
             {
-                map[m_FloorSize - 3, m_FloorSize - 2] = Map.Path;
+                map[m_FloorSize - 3, m_FloorSize - 2] = MapStructure.Path;
             }
 
             GenerateLoop(map);
 
-            return map;
+            return new Map(map, m_FloorSize);
         }
 
-        private Vector2Int? GenerateOnePath(Map[,] map, Vector2Int pos)
+        private Vector2Int? GenerateOnePath(MapStructure[,] map, Vector2Int pos)
         {
             var next = new List<Vector2Int>();
             var vectors = new List<Vector2Int>() {
@@ -144,8 +143,8 @@ namespace Escaping.GameScene
 
             foreach (var v in vectors)
             {
-                if (map[pos.x + v.x, pos.y + v.y] == Map.Wall &&
-                    map[pos.x + v.x * 2, pos.y + v.y * 2] == Map.Wall)
+                if (map[pos.x + v.x, pos.y + v.y] == MapStructure.Wall &&
+                    map[pos.x + v.x * 2, pos.y + v.y * 2] == MapStructure.Wall)
                 {
                     next.Add(v);
                 }
@@ -160,7 +159,7 @@ namespace Escaping.GameScene
             return null;
         }
 
-        private void GenerateLoop(Map[,] map)
+        private void GenerateLoop(MapStructure[,] map)
         {
             for (int i = 0; i < m_LoopNum; ++i)
             {
@@ -171,12 +170,12 @@ namespace Escaping.GameScene
                 {
                     y = Random.Range(3, m_FloorSize - 3);
 
-                    if (((x % 2 == 0 && y % 2 == 1) || (x % 2 == 1 && y % 2 == 0)) && map[x, y] == Map.Wall)
+                    if (((x % 2 == 0 && y % 2 == 1) || (x % 2 == 1 && y % 2 == 0)) && map[x, y] == MapStructure.Wall)
                     {
                         break;
                     }
                 }
-                map[x, y] = Map.Path;
+                map[x, y] = MapStructure.Path;
             }
         }
     }

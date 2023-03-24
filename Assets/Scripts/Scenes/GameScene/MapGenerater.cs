@@ -106,14 +106,14 @@ namespace Escaping.GameScene
 
                     dir = (Vector2Int)canNullDir;
                     map[pos.x + dir.x, pos.y + dir.y] = MapStructure.Path;
-                    map[pos.x + dir.x * 2, pos.y + dir.y * 2] = MapStructure.Path;
+                    map[pos.x + (dir.x * 2), pos.y + (dir.y * 2)] = MapStructure.Path;
 
                     if (pos.x % 2 == 0 && pos.y % 2 == 0)
                     {
                         candidate.Add(pos);
                     }
 
-                    pos = new Vector2Int(pos.x + dir.x * 2, pos.y + dir.y * 2);
+                    pos = new Vector2Int(pos.x + (dir.x * 2), pos.y + (dir.y * 2));
                 }
             }
 
@@ -135,16 +135,16 @@ namespace Escaping.GameScene
         {
             var next = new List<Vector2Int>();
             var vectors = new List<Vector2Int>() {
-                new Vector2Int(1,0),
-                new Vector2Int(0,1),
-                new Vector2Int(-1,0),
-                new Vector2Int(0,-1)
+                new Vector2Int(1, 0),
+                new Vector2Int(0, 1),
+                new Vector2Int(-1, 0),
+                new Vector2Int(0, -1),
             };
 
             foreach (var v in vectors)
             {
                 if (map[pos.x + v.x, pos.y + v.y] == MapStructure.Wall &&
-                    map[pos.x + v.x * 2, pos.y + v.y * 2] == MapStructure.Wall)
+                    map[pos.x + (v.x * 2), pos.y + (v.y * 2)] == MapStructure.Wall)
                 {
                     next.Add(v);
                 }
@@ -175,6 +175,7 @@ namespace Escaping.GameScene
                         break;
                     }
                 }
+
                 map[x, y] = MapStructure.Path;
             }
         }

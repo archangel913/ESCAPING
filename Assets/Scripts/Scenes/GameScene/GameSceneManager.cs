@@ -4,6 +4,9 @@
     using Escaping.Core;
     using UnityEngine;
 
+    /// <summary>
+    /// ゲームシーン管理クラス
+    /// </summary>
     public class GameSceneManager :
         SceneBase,
         SceneBase.IUnityUpdate,
@@ -20,6 +23,7 @@
 
         private Map m_Map;
 
+        /// <inheritdoc/>
         public async UniTask OnLoading()
         {
             m_Map = await m_MapGenerater.Init();
@@ -27,6 +31,7 @@
             await m_EnemyGenerater.Init(m_Map);
         }
 
+        /// <inheritdoc/>
         public void OnUpdate()
         {
             m_Player.Movement();

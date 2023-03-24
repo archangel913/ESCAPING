@@ -1,12 +1,13 @@
-using Cysharp.Threading.Tasks;
-using Escaping.Core.FileSystems;
-using Escaping.GameScene;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Escaping
 {
+    using Cysharp.Threading.Tasks;
+    using Escaping.Core.FileSystems;
+    using Escaping.GameScene;
+    using UnityEngine;
+
+    /// <summary>
+    /// 敵生成クラス
+    /// </summary>
     public class EnemyGenerater : MonoBehaviour
     {
         [SerializeField]
@@ -15,6 +16,11 @@ namespace Escaping
         [SerializeField]
         private int m_NumberOfEnemy = 2;
 
+        /// <summary>
+        /// 敵生成処理
+        /// </summary>
+        /// <param name="map">マップ情報</param>
+        /// <returns>void</returns>
         public async UniTask Init(Map map)
         {
             var enemy = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Enemy");

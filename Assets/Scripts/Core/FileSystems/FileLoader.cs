@@ -14,7 +14,8 @@ namespace Escaping.Core.FileSystems
         /// <param name="onLoadDone">読み込み完了時に呼ばれる処理</param>
         /// <param name="loading">読み込み中に呼ばれる処理</param>
         /// <returns>読み込んだオブジェクト</returns>
-        public static async UniTask<T> LoadAssetAsync<T>(string path, UnityAction onLoadDone = null, UnityAction<float> loading = null) where T : Object
+        public static async UniTask<T> LoadAssetAsync<T>(string path, UnityAction onLoadDone = null, UnityAction<float> loading = null)
+            where T : Object
         {
             var request = Resources.LoadAsync<T>(path);
 

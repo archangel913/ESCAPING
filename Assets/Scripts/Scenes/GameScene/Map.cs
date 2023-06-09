@@ -24,11 +24,6 @@
         private MapStructure[,] structure;
 
         /// <summary>
-        /// マップの一辺のサイズ
-        /// </summary>
-        public int MapSize { get; }
-
-        /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="structure">マップデータ</param>
@@ -38,6 +33,11 @@
             this.structure = structure;
             MapSize = mapSize;
         }
+
+        /// <summary>
+        /// マップの一辺のサイズ
+        /// </summary>
+        public int MapSize { get; }
 
         /// <summary>
         /// 壁と道の位置情報を拾得する

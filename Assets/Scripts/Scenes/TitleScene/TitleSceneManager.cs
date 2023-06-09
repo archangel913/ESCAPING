@@ -1,4 +1,4 @@
-namespace Escaping
+namespace Escaping.TitleScene
 {
     using Cysharp.Threading.Tasks;
     using Escaping.Core;

@@ -1,4 +1,4 @@
-namespace Escaping
+namespace Escaping.GameScene.Enemy
 {
     using Cysharp.Threading.Tasks;
     using Escaping.Core.FileSystems;
@@ -6,9 +6,9 @@ namespace Escaping
     using UnityEngine;
 
     /// <summary>
-    /// 敵生成クラス
+    /// 敵管理クラス
     /// </summary>
-    public class EnemyGenerater : MonoBehaviour
+    public class EnemyManager : MonoBehaviour
     {
         [SerializeField]
         private Transform m_EnemyParent;
@@ -17,11 +17,11 @@ namespace Escaping
         private int m_NumberOfEnemy = 2;
 
         /// <summary>
-        /// 敵生成処理
+        /// 敵生成メソッド
         /// </summary>
         /// <param name="map">マップ情報</param>
         /// <returns>void</returns>
-        public async UniTask Init(Map map)
+        public async UniTask InstantiateEnemy(Map map)
         {
             var enemy = await FileLoader.LoadAssetAsync<GameObject>("Prefabs/GameScene/Enemy");
 
@@ -39,6 +39,17 @@ namespace Escaping
                     --i;
                     continue;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 敵の移動メソッド
+        /// </summary>
+        public void EnemyMovement()
+        {
+            foreach (Transform t in m_EnemyParent)
+            {
+                t.GetComponent<Enemy>().Move();
             }
         }
     }

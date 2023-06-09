@@ -31,6 +31,7 @@ namespace Escaping.Core
             /// <summary>
             /// ロード中の処理
             /// </summary>
+            /// <returns>void</returns>
             public UniTask OnLoading();
         }
 
@@ -47,27 +48,25 @@ namespace Escaping.Core
         {
             m_IsActive = false;
             Fade.Instance.FadeOut();
-            Fade.Instance.AddOnFadeFinished((isFadeIn) =>
-            {
+            Fade.Instance.AddOnFadeFinished((isFadeIn) => {
                 if (!isFadeIn)
                 {
-                    SceneLoad(sceneName);
+                    Loading.Instance.Show();
+                    SceneManager.LoadScene(sceneName);
                 }
                 else
                 {
                     m_IsActive = true;
+                    m_IsLoaded = false;
                 }
-            });
-        }
 
-        private void SceneLoad(string sceneName)
-        {
-            Loading.Instance.Show();
-            SceneManager.LoadScene(sceneName);
+                Fade.Instance.RemoveOnFadeFinished();
+            });
         }
 
         private async void Awake()
         {
+            // ゲームが生成されてなければ生成する
             if (Game.Instance == null)
             {
                 await Game.Create("Prefabs/Core/Game");
@@ -77,9 +76,9 @@ namespace Escaping.Core
                 m_IsActive = true;
             }
 
-            ISceneLoader load;
-            if ((load = this as ISceneLoader) != null)
+            if (this is ISceneLoader load)
             {
+                // ロード処理を実行
                 await load.OnLoading();
             }
 
@@ -98,9 +97,9 @@ namespace Escaping.Core
                 return;
             }
 
-            if (this is IUnityUpdate)
+            // ループ処理を実行
+            if (this is IUnityUpdate update)
             {
-                var update = this as IUnityUpdate;
                 update.OnUpdate();
             }
         }

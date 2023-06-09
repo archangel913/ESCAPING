@@ -15,10 +15,5 @@
                 Fade.Instance.Show();
             }
         }
-
-        private void Update()
-        {
-            Loading.Instance?.Run();
-        }
     }
 }

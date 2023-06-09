@@ -1,5 +1,6 @@
 namespace Escaping.Core
 {
+    using DG.Tweening;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -17,6 +18,12 @@ namespace Escaping.Core
         {
             m_LoadingImage.enabled = true;
             gameObject.SetActive(true);
+
+            // TODO: ロード中の表示が確定したらそれに変更
+            m_LoadingImage.rectTransform
+                .DOLocalRotate(new Vector3(0, 0, 360f), 1f, RotateMode.FastBeyond360)
+                .SetEase(Ease.Linear)
+                .SetLoops(-1, LoopType.Restart);
         }
 
         /// <summary>
@@ -26,14 +33,9 @@ namespace Escaping.Core
         {
             m_LoadingImage.enabled = false;
             gameObject.SetActive(false);
-        }
 
-        /// <summary>
-        /// 実行処理
-        /// </summary>
-        public void Run()
-        {
-            m_LoadingImage.transform.Rotate(0.0f, 0.0f, -180.0f * Time.deltaTime);
+            m_LoadingImage.transform.DOKill();
+            m_LoadingImage.transform.localRotation = Quaternion.identity;
         }
 
         /// <inheritdoc/>

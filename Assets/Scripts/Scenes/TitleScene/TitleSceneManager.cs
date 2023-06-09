@@ -27,7 +27,7 @@ namespace Escaping.TitleScene
         private void ButtonSetting()
         {
             m_StartButton.onClick.AddListener(() => {
-                SceneTransition("GameScene");
+                SceneTransition(SceneName.Game);
             });
 
             m_ExitButton.onClick.AddListener(() => {

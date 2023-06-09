@@ -24,7 +24,7 @@ namespace Escaping.Core
             m_FadeImage
                 .DOColor(Color.clear, fadeTime)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => m_OnFadeFinished?.Invoke(true));
+                .OnComplete(() => OnFadeFinished(true));
             gameObject.SetActive(true);
         }
 
@@ -38,7 +38,7 @@ namespace Escaping.Core
             m_FadeImage
                 .DOColor(Color.black, fadeTime)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => m_OnFadeFinished?.Invoke(false));
+                .OnComplete(() => OnFadeFinished(false));
             gameObject.SetActive(true);
         }
 
@@ -62,15 +62,6 @@ namespace Escaping.Core
         }
 
         /// <summary>
-        /// フェード用背景を透明にする
-        /// </summary>
-        public void Hide()
-        {
-            m_FadeImage.color = Color.clear;
-            enabled = false;
-        }
-
-        /// <summary>
         /// フェード用背景を黒にする
         /// </summary>
         public void Show()
@@ -83,6 +74,13 @@ namespace Escaping.Core
         protected override void OnCreatedInstance()
         {
             m_FadeImage = GetComponent<Image>();
+        }
+
+        private void OnFadeFinished(bool isFadeIn)
+        {
+            m_FadeImage.gameObject.SetActive(!isFadeIn);
+
+            m_OnFadeFinished?.Invoke(isFadeIn);
         }
     }
 }

@@ -38,7 +38,6 @@
         {
             m_Player.Movement();
             m_EnemyManager.EnemyMovement();
-
         }
     }
 }

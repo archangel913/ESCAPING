@@ -12,7 +12,7 @@ namespace Escaping.Core.UI
     /// </summary>
     public class Popup : MonoBehaviour
     {
-        private const string PrefabPath = "Prefabs/UI/Popup";
+        private const string PrefabPath = "Prefabs/UI/Popups/Popup";
         private const float TweenTime = 0.3f;
 
         [Header("Popup")]
@@ -115,6 +115,25 @@ namespace Escaping.Core.UI
         {
             var prefab = FileLoader.LoadAssetAsync<PopupContentBase>(prefabPath);
             return await InstantiatePopup(await prefab, size);
+        }
+
+        /// <summary>
+        /// テキストポップアップを生成
+        /// </summary>
+        /// <param name="size">ポップアップのサイズ</param>
+        /// <returns>ポップアップ</returns>
+        public static async UniTask<Popup> InstantiateTextPopup(Size size)
+        {
+            return await InstantiatePopup("Prefabs/UI/Popups/TextPopupContent", size);
+        }
+
+        /// <summary>
+        /// テキストポップアップを生成
+        /// </summary>
+        /// <returns>ポップアップ</returns>
+        public static async UniTask<Popup> InstantiateTextPopup()
+        {
+            return await InstantiateTextPopup(Size.Midium);
         }
 
         /// <summary>

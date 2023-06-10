@@ -62,6 +62,11 @@ namespace Escaping.Core.UI
         /// </summary>
         public void Update()
         {
+            if (m_Popups is null)
+            {
+                return;
+            }
+
             foreach (var popup in m_Popups)
             {
                 if (popup.Value.GetContent() is PopupContentBase.IUnityUpdate update)

@@ -1,6 +1,7 @@
 namespace Escaping.Core
 {
     using Cysharp.Threading.Tasks;
+    using Escaping.Core.UI;
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
@@ -102,6 +103,8 @@ namespace Escaping.Core
             {
                 update.OnUpdate();
             }
+
+            PopupManager.Instance.Update();
         }
     }
 }

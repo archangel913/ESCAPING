@@ -2,8 +2,8 @@ namespace Escaping.TitleScene
 {
     using Cysharp.Threading.Tasks;
     using Escaping.Core;
+    using Escaping.Core.UI;
     using UnityEngine;
-    using UnityEngine.UI;
 
     /// <summary>
     /// タイトルシーンの管理クラス
@@ -11,10 +11,10 @@ namespace Escaping.TitleScene
     public class TitleSceneManager : SceneBase, SceneBase.ISceneLoader
     {
         [SerializeField]
-        private Button m_StartButton;
+        private GameButton m_StartButton;
 
         [SerializeField]
-        private Button m_ExitButton;
+        private GameButton m_ExitButton;
 
         /// <inheritdoc/>
         public UniTask OnLoading()
@@ -26,11 +26,11 @@ namespace Escaping.TitleScene
 
         private void ButtonSetting()
         {
-            m_StartButton.onClick.AddListener(() => {
+            m_StartButton.AddPressed(() => {
                 SceneTransition(SceneName.Game);
             });
 
-            m_ExitButton.onClick.AddListener(() => {
+            m_ExitButton.AddPressed(() => {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
 #else

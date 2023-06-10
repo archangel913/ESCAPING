@@ -8,7 +8,7 @@ namespace Escaping.GameScene
     /// <summary>
     /// マップ生成クラス
     /// </summary>
-    public class MapGenerater : MonoBehaviour
+    public class MapGenerator : MonoBehaviour
     {
         [SerializeField]
         private int m_FloorSize = 31;
@@ -165,18 +165,25 @@ namespace Escaping.GameScene
             {
                 int x = Random.Range(3, m_FloorSize - 3);
                 int y;
+                int searchCount = 20;
+                bool isAdded = false;
 
-                while (true)
+                for (int j = 0; j < searchCount; j++)
                 {
                     y = Random.Range(3, m_FloorSize - 3);
 
                     if (((x % 2 == 0 && y % 2 == 1) || (x % 2 == 1 && y % 2 == 0)) && map[x, y] == MapStructure.Wall)
                     {
+                        map[x, y] = MapStructure.Path;
+                        isAdded = true;
                         break;
                     }
                 }
 
-                map[x, y] = MapStructure.Path;
+                if (!isAdded)
+                {
+                    --i;
+                }
             }
         }
     }

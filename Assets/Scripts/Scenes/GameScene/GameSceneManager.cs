@@ -14,7 +14,7 @@
         SceneBase.ISceneLoader
     {
         [SerializeField]
-        private MapGenerater m_MapGenerater;
+        private MapGenerator m_MapGenerator;
 
         [SerializeField]
         private Player m_Player;
@@ -27,7 +27,8 @@
         /// <inheritdoc/>
         public async UniTask OnLoading()
         {
-            m_Map = await m_MapGenerater.Init();
+            m_Map = await m_MapGenerator.Init();
+            await UniTask.Delay(1000);
             m_Player.Init();
             await m_EnemyManager.InstantiateEnemy(m_Map);
         }

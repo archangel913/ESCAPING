@@ -10,15 +10,14 @@
         SceneBase.ISceneLoader
     {
         [SerializeField]
-        private GenerateMap m_GenerateMap;
+        private MapGenerator m_GenerateMap;
 
         [SerializeField]
         private Player m_Player;
 
         public async UniTask OnLoading()
         {
-            m_GenerateMap.Init();
-            await UniTask.Delay(1000);
+            await m_GenerateMap.Init();
             m_Player.Init();
         }
 

@@ -9,7 +9,6 @@ namespace Escaping.Core
     /// </summary>
     public class SceneBase : MonoBehaviour
     {
-        private bool m_IsActive;
         private bool m_IsLoaded;
 
         /// <summary>
@@ -46,7 +45,6 @@ namespace Escaping.Core
         /// <param name="sceneName">ì«Ç›çûÇﬁÉVÅ[Éìñº</param>
         public void SceneTransition(string sceneName)
         {
-            m_IsActive = false;
             Fade.Instance.FadeOut();
             Fade.Instance.AddOnFadeFinished((isFadeIn) => {
                 if (!isFadeIn)
@@ -56,7 +54,6 @@ namespace Escaping.Core
                 }
                 else
                 {
-                    m_IsActive = true;
                     m_IsLoaded = false;
                 }
 
@@ -67,13 +64,12 @@ namespace Escaping.Core
         private async void Awake()
         {
             // ÉQÅ[ÉÄÇ™ê∂ê¨Ç≥ÇÍÇƒÇ»ÇØÇÍÇŒê∂ê¨Ç∑ÇÈ
-            if (Game.Instance == null)
+            if (Game.Instance is null)
             {
                 await Game.Create("Prefabs/Core/Game");
                 CurrentScene = SceneManager.GetActiveScene();
                 await Loading.Create("Prefabs/Core/LoadingImage", Game.Instance.transform);
                 Loading.Instance.Show();
-                m_IsActive = true;
             }
 
             if (this is ISceneLoader load)
@@ -92,7 +88,7 @@ namespace Escaping.Core
 
         private void Update()
         {
-            if (!m_IsActive || !m_IsLoaded)
+            if (Game.Instance is null || !m_IsLoaded)
             {
                 return;
             }

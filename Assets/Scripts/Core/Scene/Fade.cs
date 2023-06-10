@@ -24,7 +24,7 @@ namespace Escaping.Core
             m_FadeImage
                 .DOColor(Color.clear, fadeTime)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => OnFadeFinished(true));
+                .OnKill(() => OnFadeFinished(true));
             gameObject.SetActive(true);
         }
 
@@ -38,7 +38,7 @@ namespace Escaping.Core
             m_FadeImage
                 .DOColor(Color.black, fadeTime)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => OnFadeFinished(false));
+                .OnKill(() => OnFadeFinished(false));
             gameObject.SetActive(true);
         }
 
